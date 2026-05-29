@@ -1,0 +1,395 @@
+/* style.css - Clean, premium local stylesheet for Jean Chen's Personal Clock page */
+
+/* Design Tokens */
+:root {
+  --bg-dark: hsl(224, 71%, 4%);
+  --card-bg: hsla(224, 71%, 8%, 0.45);
+  --card-border: hsla(224, 71%, 20%, 0.4);
+  --text-primary: hsl(0, 0%, 100%);
+  --text-secondary: hsl(220, 20%, 75%);
+  --text-muted: hsl(220, 15%, 55%);
+  
+  --accent-1: hsl(263, 90%, 65%); /* Violet */
+  --accent-2: hsl(190, 100%, 50%); /* Cyan */
+  --accent-3: hsl(325, 90%, 60%);  /* Pink */
+  
+  --shadow-color: hsla(263, 90%, 10%, 0.3);
+  --glow-strength: 20px;
+}
+
+/* Light Theme Settings */
+[data-theme="light"] {
+  --bg-dark: hsl(220, 30%, 96%);
+  --card-bg: hsla(220, 30%, 100%, 0.7);
+  --card-border: hsla(220, 30%, 80%, 0.5);
+  --text-primary: hsl(224, 71%, 4%);
+  --text-secondary: hsl(224, 20%, 25%);
+  --text-muted: hsl(224, 15%, 45%);
+  
+  --accent-1: hsl(263, 85%, 55%);
+  --accent-2: hsl(190, 95%, 40%);
+  --accent-3: hsl(325, 85%, 50%);
+  
+  --shadow-color: hsla(220, 30%, 70%, 0.2);
+}
+
+/* CSS Reset & General Styles */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  /* System Font Stack - no external/online web fonts needed */
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
+  background-color: var(--bg-dark);
+  color: var(--text-primary);
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  position: relative;
+  transition: background-color 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+/* SVG Icon styles */
+.icon-svg {
+  width: 1.25rem;
+  height: 1.25rem;
+  display: inline-block;
+  vertical-align: middle;
+}
+
+.avatar-icon-svg {
+  width: 2.2rem;
+  height: 2.2rem;
+}
+
+/* Animated Background Orbs */
+.bg-animation {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.orb {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(100px);
+  opacity: 0.45;
+  mix-blend-mode: screen;
+  transition: all 1s ease;
+}
+
+[data-theme="light"] .orb {
+  opacity: 0.25;
+  mix-blend-mode: multiply;
+  filter: blur(80px);
+}
+
+.orb-1 {
+  width: 500px;
+  height: 500px;
+  background: radial-gradient(circle, var(--accent-1) 0%, transparent 70%);
+  top: -10%;
+  left: -10%;
+  animation: drift 25s infinite alternate ease-in-out;
+}
+
+.orb-2 {
+  width: 600px;
+  height: 600px;
+  background: radial-gradient(circle, var(--accent-2) 0%, transparent 70%);
+  bottom: -15%;
+  right: -10%;
+  animation: drift 30s infinite alternate-reverse ease-in-out;
+}
+
+.orb-3 {
+  width: 400px;
+  height: 400px;
+  background: radial-gradient(circle, var(--accent-3) 0%, transparent 70%);
+  top: 40%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  animation: pulse-orb 20s infinite alternate ease-in-out;
+}
+
+@keyframes drift {
+  0% { transform: translate(0, 0) scale(1); }
+  50% { transform: translate(50px, 80px) scale(1.1); }
+  100% { transform: translate(-30px, -50px) scale(0.9); }
+}
+
+@keyframes pulse-orb {
+  0% { transform: translate(-50%, -50%) scale(0.8); opacity: 0.35; }
+  100% { transform: translate(-45%, -45%) scale(1.2); opacity: 0.55; }
+}
+
+/* Main Container & Glassmorphism Card */
+.container {
+  position: relative;
+  z-index: 1;
+  padding: 20px;
+  width: 100%;
+  max-width: 560px;
+  perspective: 1000px;
+}
+
+.card {
+  background: var(--card-bg);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid var(--card-border);
+  border-radius: 28px;
+  padding: 40px;
+  box-shadow: 0 20px 50px var(--shadow-color);
+  text-align: center;
+  transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1), 
+              box-shadow 0.6s cubic-bezier(0.16, 1, 0.3, 1),
+              border-color 0.8s ease, 
+              background-color 0.8s ease;
+  transform-style: preserve-3d;
+}
+
+.card:hover {
+  transform: translateY(-8px) rotateX(2deg) rotateY(-2deg);
+  box-shadow: 0 30px 60px var(--shadow-color), 
+              0 0 40px hsla(263, 90%, 65%, 0.15);
+  border-color: hsla(263, 90%, 65%, 0.3);
+}
+
+/* Card Details & Decorative elements */
+.avatar-wrapper {
+  position: relative;
+  width: 90px;
+  height: 90px;
+  margin: 0 auto 24px;
+}
+
+.avatar-ring {
+  position: absolute;
+  top: -3px;
+  left: -3px;
+  right: -3px;
+  bottom: -3px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--accent-1), var(--accent-2), var(--accent-3));
+  animation: rotate-ring 8s linear infinite;
+  z-index: 1;
+}
+
+@keyframes rotate-ring {
+  100% { transform: rotate(360deg); }
+}
+
+.avatar {
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: calc(100% - 4px);
+  height: calc(100% - 4px);
+  background-color: var(--bg-dark);
+  border-radius: 50%;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.8s ease;
+}
+
+/* Typography & Text Styles */
+.greeting-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 14px;
+  background: hsla(224, 71%, 20%, 0.2);
+  border: 1px solid var(--card-border);
+  border-radius: 20px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--accent-2);
+  margin-bottom: 20px;
+  transition: all 0.3s ease;
+}
+
+[data-theme="light"] .greeting-tag {
+  background: hsla(220, 30%, 90%, 0.5);
+}
+
+.greeting-tag svg {
+  color: var(--accent-2);
+}
+
+h1 {
+  font-size: 2.5rem;
+  font-weight: 800;
+  margin-bottom: 8px;
+  letter-spacing: -0.5px;
+  line-height: 1.2;
+}
+
+.name-gradient {
+  background: linear-gradient(135deg, var(--text-primary) 30%, var(--accent-1) 70%, var(--accent-3));
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: shine-text 5s linear infinite;
+}
+
+@keyframes shine-text {
+  0% { background-position: 0% center; }
+  50% { background-position: 100% center; }
+  100% { background-position: 0% center; }
+}
+
+.intro-text {
+  font-size: 1.05rem;
+  color: var(--text-secondary);
+  margin-bottom: 35px;
+  font-weight: 300;
+}
+
+.intro-text strong {
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+/* Live Clock Widget */
+.clock-widget {
+  background: hsla(0, 0%, 0%, 0.15);
+  border: 1px solid var(--card-border);
+  border-radius: 20px;
+  padding: 24px;
+  margin-bottom: 25px;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+[data-theme="light"] .clock-widget {
+  background: hsla(0, 0%, 100%, 0.4);
+}
+
+.clock-time {
+  font-size: 3.2rem;
+  font-weight: 800;
+  letter-spacing: -1px;
+  color: var(--text-primary);
+  margin-bottom: 6px;
+  display: flex;
+  justify-content: center;
+  align-items: baseline;
+  gap: 4px;
+  font-variant-numeric: tabular-nums;
+}
+
+.clock-seconds {
+  font-size: 1.5rem;
+  color: var(--accent-2);
+  font-weight: 400;
+  margin-left: 2px;
+}
+
+.clock-period {
+  font-size: 1.2rem;
+  color: var(--text-muted);
+  font-weight: 600;
+  margin-left: 6px;
+  text-transform: uppercase;
+}
+
+.clock-date {
+  font-size: 1rem;
+  color: var(--text-secondary);
+  font-weight: 500;
+  letter-spacing: 0.5px;
+}
+
+/* Interactive controls */
+.controls {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  margin-top: 15px;
+}
+
+.btn {
+  background: hsla(0, 0%, 100%, 0.05);
+  border: 1px solid var(--card-border);
+  color: var(--text-secondary);
+  padding: 10px 16px;
+  border-radius: 14px;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 0.85rem;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+[data-theme="light"] .btn {
+  background: hsla(0, 0%, 0%, 0.03);
+}
+
+.btn:hover {
+  background: hsla(0, 0%, 100%, 0.1);
+  color: var(--text-primary);
+  border-color: var(--accent-1);
+  transform: translateY(-2px);
+}
+
+[data-theme="light"] .btn:hover {
+  background: hsla(0, 0%, 0%, 0.06);
+}
+
+.btn:active {
+  transform: translateY(0);
+}
+
+/* Footer styling */
+.footer {
+  margin-top: 30px;
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  letter-spacing: 0.5px;
+}
+
+.footer a {
+  color: var(--accent-2);
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.footer a:hover {
+  color: var(--accent-1);
+}
+
+/* Responsive adjustments */
+@media (max-width: 480px) {
+  .card {
+    padding: 30px 20px;
+    border-radius: 20px;
+  }
+  h1 {
+    font-size: 2rem;
+  }
+  .clock-time {
+    font-size: 2.5rem;
+  }
+  .clock-seconds {
+    font-size: 1.2rem;
+  }
+}
